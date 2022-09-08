@@ -1,7 +1,8 @@
 import { reelsSetup, payLines } from './constants';
 
 const playedLine = initPlay(reelsSetup);
-getResults(playedLine);
+const results = getResults(playedLine);
+formatResults({ playedLine, results });
 
 function initPlay(reelsSetup) {
   const line = [];
@@ -54,12 +55,26 @@ function checkLine({ playedLine, payLine }) {
 }
 
 function getResults(playedLine) {
+  const checkedLines = [];
+
+  for (const currentPayLine of payLines) {
+    checkedLines.push({
+      payLine: currentPayLine,
+      checkResult: checkLine({ playedLine, payLine: currentPayLine }),
+    });
+  }
+
+  return {
+    playedLine,
+    checkedLines,
+  };
+}
+
+function formatResults({ playedLine, results }) {
   console.log(playedLine.join(','));
   console.log('---');
 
-  for (const currentPayLine of payLines) {
-    const playResult = checkLine({ playedLine, payLine: currentPayLine });
-
-    console.log(currentPayLine.join(','), playResult);
+  for (const { payLine, checkResult } of results.checkedLines) {
+    console.log(payLine.join(','), checkResult);
   }
 }
