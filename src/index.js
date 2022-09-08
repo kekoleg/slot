@@ -1,7 +1,18 @@
 import { reelsSetup, payLines } from './constants';
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+const playedLine = initPlay(reelsSetup);
+getResults(playedLine);
+
+function initPlay(reelsSetup) {
+  const line = [];
+
+  for (const reelConfig of reelsSetup) {
+    const reel = generateReel(reelConfig);
+    const randomReelSymbol = reel[getRandomInt(reel.length)];
+    line.push(randomReelSymbol);
+  }
+
+  return line;
 }
 
 function generateReel(reelConfig) {
@@ -20,6 +31,10 @@ function generateReel(reelConfig) {
   return reelSymbols;
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 function populateSymbol({ symbolCount, finalElementsArray = [], elementToPush }) {
   if (symbolCount > 0) {
     finalElementsArray.push(elementToPush);
@@ -27,20 +42,6 @@ function populateSymbol({ symbolCount, finalElementsArray = [], elementToPush })
   }
   return finalElementsArray;
 }
-
-function initPlay(reelsSetup) {
-  const line = [];
-
-  for (const reelConfig of reelsSetup) {
-    const reel = generateReel(reelConfig);
-    const randomReelSymbol = reel[getRandomInt(reel.length)];
-    line.push(randomReelSymbol);
-  }
-
-  return line;
-}
-
-const playedLine = initPlay(reelsSetup);
 
 function checkLine({ playedLine, payLine }) {
   const difference = payLine.filter((currentSymbol, index) => playedLine[index] == currentSymbol);
@@ -62,5 +63,3 @@ function getResults(playedLine) {
     console.log(currentPayLine.join(','), playResult);
   }
 }
-
-getResults(playedLine);
